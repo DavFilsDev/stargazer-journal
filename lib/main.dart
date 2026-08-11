@@ -27,10 +27,6 @@ Future<void> main() async {
 class StargazerJournalApp extends StatelessWidget {
   const StargazerJournalApp({super.key});
 
-  // A single vivid "neon" accent — everything else (surfaces, borders,
-  // glass panels) stays derived from it via ColorScheme.fromSeed, so the
-  // futuristic look comes from *effects* (blur, glow, motion) rather
-  // than from throwing many colors at the screen.
   static const Color _accent = Color(0xFF5B8CFF);
 
   static final ColorScheme _lightScheme = ColorScheme.fromSeed(
@@ -45,14 +41,10 @@ class StargazerJournalApp extends StatelessWidget {
 
   static ThemeData _buildTheme(ColorScheme scheme) {
     final base = ThemeData(colorScheme: scheme, useMaterial3: true);
-    // JetBrains Mono across the whole app — headings, body text,
-    // buttons, form fields — for a consistent, technical look.
     final monoTextTheme = GoogleFonts.jetBrainsMonoTextTheme(base.textTheme);
 
     return base.copyWith(
       textTheme: monoTextTheme,
-      // Transparent so the animated StarfieldBackground (mounted once
-      // in `builder` below) always shows through every screen.
       scaffoldBackgroundColor: Colors.transparent,
       canvasColor: Colors.transparent,
       appBarTheme: AppBarTheme(
@@ -68,18 +60,18 @@ class StargazerJournalApp extends StatelessWidget {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        indicatorColor: scheme.primary.withOpacity(0.22),
+        indicatorColor: scheme.primary.withValues(alpha: 0.22),
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: Colors.transparent,
-        indicatorColor: scheme.primary.withOpacity(0.22),
+        indicatorColor: scheme.primary.withValues(alpha: 0.22),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: scheme.surface.withOpacity(0.4),
+        fillColor: scheme.surface.withValues(alpha: 0.4),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: scheme.primary.withOpacity(0.25)),
+          borderSide: BorderSide(color: scheme.primary.withValues(alpha: 0.25)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -87,14 +79,14 @@ class StargazerJournalApp extends StatelessWidget {
         ),
       ),
       chipTheme: base.chipTheme.copyWith(
-        backgroundColor: scheme.surface.withOpacity(0.35),
-        selectedColor: scheme.primary.withOpacity(0.3),
+        backgroundColor: scheme.surface.withValues(alpha: 0.35),
+        selectedColor: scheme.primary.withValues(alpha: 0.3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: scheme.primary.withOpacity(0.25)),
+          side: BorderSide(color: scheme.primary.withValues(alpha: 0.25)),
         ),
       ),
-      dividerTheme: DividerThemeData(color: scheme.primary.withOpacity(0.15)),
+      dividerTheme: DividerThemeData(color: scheme.primary.withValues(alpha: 0.15)),
     );
   }
 
@@ -109,9 +101,6 @@ class StargazerJournalApp extends StatelessWidget {
       theme: _buildTheme(_lightScheme),
       darkTheme: _buildTheme(_darkScheme),
       routerConfig: appRouter,
-      // Mounted once, outside the router's Navigator — the starfield
-      // animation keeps running smoothly across route changes instead
-      // of restarting on every new screen.
       builder: (context, child) => StarfieldBackground(child: child!),
     );
   }

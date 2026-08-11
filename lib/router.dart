@@ -9,9 +9,6 @@ import 'screens/star_detail_screen.dart';
 import 'screens/star_list_screen.dart';
 import 'utils/constants.dart';
 
-/// Builds a [CustomTransitionPage] with a fade + subtle rise-in
-/// transition, used for every route so navigation feels smooth and
-/// consistent instead of relying on the default platform transition.
 CustomTransitionPage<void> _fadeThroughPage({
   required LocalKey key,
   required Widget child,

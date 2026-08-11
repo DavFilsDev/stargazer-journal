@@ -8,11 +8,6 @@ import '../widgets/glass_container.dart';
 import '../widgets/star_card.dart';
 import '../widgets/star_search_bar.dart';
 
-/// Home screen: search/filter field on top, list (mobile) or grid
-/// (tablet+) of [StarCard]s below, each animating in with [FadeSlideIn].
-///
-/// All data comes from [StarService] — this screen holds only UI state
-/// (the current search text and type filter), never the catalog itself.
 class StarListScreen extends StatefulWidget {
   const StarListScreen({super.key});
 
@@ -87,8 +82,6 @@ class _StarListScreenState extends State<StarListScreen> {
   }
 }
 
-/// Row of filter chips to narrow the catalog down to a single
-/// [CelestialType], in addition to free-text search.
 class _TypeFilterRow extends StatelessWidget {
   final CelestialType? selected;
   final ValueChanged<CelestialType?> onSelected;
@@ -117,9 +110,6 @@ class _TypeFilterRow extends StatelessWidget {
   }
 }
 
-/// Switches between a single-column [ListView] on narrow screens and a
-/// multi-column [GridView] on wide screens. Each item fades/slides in
-/// with a small stagger based on its index.
 class _AdaptiveResultsView extends StatelessWidget {
   final List<Star> stars;
 

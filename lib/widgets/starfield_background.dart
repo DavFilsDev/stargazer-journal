@@ -80,8 +80,8 @@ class _StarfieldBackgroundState extends State<StarfieldBackground>
               center: const Alignment(-0.4, -0.7),
               radius: 1.3,
               colors: [
-                scheme.primary.withOpacity(0.22),
-                scheme.surface.withOpacity(0),
+                scheme.primary.withValues(alpha: 0.22),
+                scheme.surface.withValues(alpha: 0),
               ],
             ),
           ),
@@ -116,7 +116,7 @@ class _StarfieldPainter extends CustomPainter {
     final paint = Paint();
     for (final star in stars) {
       final twinkle = (sin((t * 2 * pi / star.speed) + star.phase) + 1) / 2;
-      paint.color = color.withOpacity(0.12 + twinkle * 0.45);
+      paint.color = color.withValues(alpha: 0.12 + twinkle * 0.45);
       canvas.drawCircle(
         Offset(star.x * size.width, star.y * size.height),
         star.radius,

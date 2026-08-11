@@ -9,12 +9,6 @@ import '../utils/constants.dart';
 import '../widgets/glass_app_bar.dart';
 import '../widgets/glass_container.dart';
 
-/// Form screen to log a new [Observation] for the star identified by
-/// [starId].
-///
-/// Required fields (3, as specified): [_descriptionController] text,
-/// a selected [_date], and a selected [_time]. All three are validated
-/// through [_formKey] before submission.
 class ObservationFormScreen extends StatefulWidget {
   final String starId;
 

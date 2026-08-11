@@ -78,7 +78,7 @@ class _StarThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      color: scheme.primary.withOpacity(0.14),
+      color: scheme.primary.withValues(alpha: 0.14),
       child: Center(
         child: Icon(_iconFor(star.type), size: 36, color: scheme.primary),
       ),

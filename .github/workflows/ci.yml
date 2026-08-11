@@ -1,7 +1,5 @@
 name: CI
 
-# Runs on every push and pull request targeting main, so lint/type
-# issues and broken tests are caught before merging.
 on:
   push:
     branches: [main]

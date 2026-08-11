@@ -4,11 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../utils/constants.dart';
 import '../widgets/adaptive_scaffold.dart';
 
-/// Shell wrapping the two top-level destinations (Home, Settings) with
-/// [AdaptiveScaffold], used as the `builder` of the router's `ShellRoute`
-/// (see `router.dart`). `StarDetailScreen` and `ObservationFormScreen`
-/// are pushed *outside* this shell, so they appear full-screen without
-/// the bottom navigation / rail.
 class MainShellScreen extends StatelessWidget {
   final Widget child;
 

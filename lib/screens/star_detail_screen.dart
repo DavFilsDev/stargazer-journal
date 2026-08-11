@@ -10,11 +10,6 @@ import '../widgets/fade_slide_in.dart';
 import '../widgets/glass_app_bar.dart';
 import '../widgets/glass_container.dart';
 
-/// Detail screen for a single [Star], resolved from the `:id` path
-/// parameter set up in the router (see `router.dart`).
-///
-/// Also lists any observations already logged for this star, and offers
-/// a button to log a new one via [AppRoutes.addObservation].
 class StarDetailScreen extends StatelessWidget {
   final String starId;
 
@@ -25,9 +20,9 @@ class StarDetailScreen extends StatelessWidget {
     final star = StarService.getById(starId);
 
     if (star == null) {
-      return Scaffold(
-        appBar: const GlassAppBar(title: 'Not found'),
-        body: const Center(
+      return const Scaffold(
+        appBar: GlassAppBar(title: 'Not found'),
+        body: Center(
           child: Text('This celestial object could not be found.'),
         ),
       );

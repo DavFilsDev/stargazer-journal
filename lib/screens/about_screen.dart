@@ -4,7 +4,6 @@ import '../utils/constants.dart';
 import '../widgets/glass_app_bar.dart';
 import '../widgets/glass_container.dart';
 
-/// Optional 5th screen giving basic information about the app.
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 

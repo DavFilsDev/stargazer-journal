@@ -5,8 +5,6 @@ import '../utils/constants.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/theme_toggle.dart';
 
-/// Settings screen: theme toggle plus a couple of secondary options,
-/// grouped inside a glass panel consistent with the rest of the app.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -30,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
                 const ThemeToggle(),
                 Divider(
                   height: 1,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                 ),
                 const ListTile(
                   leading: Icon(Icons.notifications_outlined),
@@ -40,7 +38,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 Divider(
                   height: 1,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                 ),
                 ListTile(
                   leading: const Icon(Icons.info_outline),

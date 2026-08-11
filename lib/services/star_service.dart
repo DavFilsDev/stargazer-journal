@@ -1,10 +1,5 @@
 import '../models/star.dart';
 
-/// Provides access to the catalog of celestial objects.
-///
-/// Screens and widgets never hardcode star data themselves — they always
-/// go through this service, so the data source can later be swapped for
-/// a real API or local database without touching any UI code.
 class StarService {
   StarService._();
 
@@ -131,10 +126,8 @@ class StarService {
     ),
   ];
 
-  /// Returns the full catalog.
   static List<Star> getAll() => List.unmodifiable(_catalog);
 
-  /// Returns the star matching [id], or null if not found.
   static Star? getById(String id) {
     for (final star in _catalog) {
       if (star.id == id) return star;
@@ -142,9 +135,6 @@ class StarService {
     return null;
   }
 
-  /// Returns the subset of the catalog whose name or constellation
-  /// contains [query] (case-insensitive), optionally narrowed further
-  /// to a single [type].
   static List<Star> search(String query, {CelestialType? type}) {
     final normalized = query.trim().toLowerCase();
     return _catalog.where((star) {

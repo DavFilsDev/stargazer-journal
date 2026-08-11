@@ -24,14 +24,14 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: AppBar(
           title: Text(title),
           actions: actions,
-          backgroundColor: scheme.surface.withOpacity(0.45),
+          backgroundColor: scheme.surface.withValues(alpha: 0.45),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
             child: Container(
               height: 1,
-              color: scheme.primary.withOpacity(0.2),
+              color: scheme.primary.withValues(alpha: 0.2),
             ),
           ),
         ),
