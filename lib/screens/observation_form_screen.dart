@@ -6,6 +6,8 @@ import '../models/observation.dart';
 import '../services/observation_service.dart';
 import '../services/star_service.dart';
 import '../utils/constants.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
 
 /// Form screen to log a new [Observation] for the star identified by
 /// [starId].
@@ -84,81 +86,94 @@ class _ObservationFormScreenState extends State<ObservationFormScreen> {
     final star = StarService.getById(widget.starId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('New observation${star != null ? ' — ${star.name}' : ''}'),
+      appBar: GlassAppBar(
+        title: 'New observation${star != null ? ' — ${star.name}' : ''}',
       ),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.medium),
           children: [
-            TextFormField(
-              controller: _descriptionController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: 'What did you observe?',
-                hintText: 'e.g. Clearly visible with the naked eye, no clouds',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please describe your observation.';
-                }
-                if (value.trim().length < 5) {
-                  return 'Please add a bit more detail (min. 5 characters).';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: AppSpacing.medium),
-            FormField<DateTime>(
-              initialValue: _date,
-              validator: (_) =>
-                  _date == null ? 'Please select a date.' : null,
-              builder: (field) => _PickerTile(
-                icon: Icons.calendar_today,
-                label: 'Date',
-                value: _date == null
-                    ? 'Select the observation date'
-                    : '${_date!.year}-${_date!.month.toString().padLeft(2, '0')}-${_date!.day.toString().padLeft(2, '0')}',
-                errorText: field.errorText,
-                onTap: () async {
-                  await _pickDate();
-                  field.didChange(_date);
-                },
-              ),
-            ),
-            const SizedBox(height: AppSpacing.medium),
-            FormField<TimeOfDay>(
-              initialValue: _time,
-              validator: (_) =>
-                  _time == null ? 'Please select a time.' : null,
-              builder: (field) => _PickerTile(
-                icon: Icons.access_time,
-                label: 'Time',
-                value: _time == null
-                    ? 'Select the observation time'
-                    : _time!.format(context),
-                errorText: field.errorText,
-                onTap: () async {
-                  await _pickTime();
-                  field.didChange(_time);
-                },
-              ),
-            ),
-            const SizedBox(height: AppSpacing.medium),
-            Text('Rating', style: Theme.of(context).textTheme.titleSmall),
-            Row(
-              children: [
-                for (var i = 1; i <= 5; i++)
-                  IconButton(
-                    onPressed: () => setState(() => _rating = i),
-                    icon: Icon(
-                      i <= _rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
+            GlassContainer(
+              borderRadius: BorderRadius.circular(18),
+              blurSigma: 12,
+              opacity: 0.3,
+              padding: const EdgeInsets.all(AppSpacing.medium),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _descriptionController,
+                    maxLines: 4,
+                    decoration: const InputDecoration(
+                      labelText: 'What did you observe?',
+                      hintText:
+                          'e.g. Clearly visible with the naked eye, no clouds',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please describe your observation.';
+                      }
+                      if (value.trim().length < 5) {
+                        return 'Please add a bit more detail (min. 5 characters).';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.medium),
+                  FormField<DateTime>(
+                    initialValue: _date,
+                    validator: (_) =>
+                        _date == null ? 'Please select a date.' : null,
+                    builder: (field) => _PickerTile(
+                      icon: Icons.calendar_today,
+                      label: 'Date',
+                      value: _date == null
+                          ? 'Select the observation date'
+                          : '${_date!.year}-${_date!.month.toString().padLeft(2, '0')}-${_date!.day.toString().padLeft(2, '0')}',
+                      errorText: field.errorText,
+                      onTap: () async {
+                        await _pickDate();
+                        field.didChange(_date);
+                      },
                     ),
                   ),
-              ],
+                  const SizedBox(height: AppSpacing.medium),
+                  FormField<TimeOfDay>(
+                    initialValue: _time,
+                    validator: (_) =>
+                        _time == null ? 'Please select a time.' : null,
+                    builder: (field) => _PickerTile(
+                      icon: Icons.access_time,
+                      label: 'Time',
+                      value: _time == null
+                          ? 'Select the observation time'
+                          : _time!.format(context),
+                      errorText: field.errorText,
+                      onTap: () async {
+                        await _pickTime();
+                        field.didChange(_time);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.medium),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Rating',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      for (var i = 1; i <= 5; i++)
+                        _AnimatedRatingStar(
+                          filled: i <= _rating,
+                          onTap: () => setState(() => _rating = i),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: AppSpacing.large),
             FilledButton(
@@ -169,6 +184,31 @@ class _ObservationFormScreenState extends State<ObservationFormScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A single tappable rating star that pops with a small scale animation
+/// whenever its filled state changes.
+class _AnimatedRatingStar extends StatelessWidget {
+  final bool filled;
+  final VoidCallback onTap;
+
+  const _AnimatedRatingStar({required this.filled, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onTap,
+      icon: AnimatedScale(
+        scale: filled ? 1.15 : 1.0,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutBack,
+        child: Icon(
+          filled ? Icons.star : Icons.star_border,
+          color: Colors.amber,
         ),
       ),
     );
@@ -203,7 +243,6 @@ class _PickerTile extends StatelessWidget {
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
           errorText: errorText,
           prefixIcon: Icon(icon),
         ),
