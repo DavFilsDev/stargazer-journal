@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
+
 /// Optional 5th screen giving basic information about the app.
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -7,28 +11,35 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('About')),
-      body: const Padding(
-        padding: EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.auto_awesome, size: 48),
-            SizedBox(height: 16),
-            Text(
-              'Stargazer Journal',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Stargazer Journal helps amateur astronomers browse a '
-              'catalog of stars, planets, nebulae and galaxies, and keep '
-              'a personal log of their observations: what they saw, '
-              'when, and how it went.',
-            ),
-            SizedBox(height: 16),
-            Text('Version 1.0.0'),
-          ],
+      appBar: const GlassAppBar(title: 'About'),
+      body: Padding(
+        padding: const EdgeInsets.all(AppSpacing.medium),
+        child: GlassContainer(
+          borderRadius: BorderRadius.circular(18),
+          blurSigma: 14,
+          opacity: 0.35,
+          padding: const EdgeInsets.all(AppSpacing.large),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.auto_awesome, size: 48, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(height: AppSpacing.medium),
+              Text(
+                'Stargazer Journal',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: AppSpacing.small),
+              const Text(
+                'Stargazer Journal helps amateur astronomers browse a '
+                'catalog of stars, planets, nebulae and galaxies, and keep '
+                'a personal log of their observations: what they saw, '
+                'when, and how it went.',
+              ),
+              const SizedBox(height: AppSpacing.medium),
+              const Text('Version 1.0.0'),
+            ],
+          ),
         ),
       ),
     );
