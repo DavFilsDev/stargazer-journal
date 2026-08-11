@@ -88,3 +88,10 @@ Run the tests with:
 ```bash
 flutter test
 ```
+## Screenshots
+
+| | |
+|---|---|
+| ![Explore screen — light theme](assets/screenshots/home_light.png)<br>Explore — light theme | ![Explore screen — dark theme](assets/screenshots/home_dark.png)<br>Explore — dark theme |
+| ![Star detail screen — Sirius](assets/screenshots/star_detail_sirius.png)<br>Star detail — Sirius, with a logged observation | ![Observation form screen](assets/screenshots/observation_form.png)<br>New observation form |
+| ![Settings screen](assets/screenshots/settings.png)<br>Settings — dark mode toggle | ![Explore screen — tablet layout](assets/screenshots/explor_tablet.png)<br>Explore — tablet layout (NavigationRail) |
