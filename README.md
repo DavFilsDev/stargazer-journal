@@ -61,8 +61,3 @@ Run the tests with:
 ```bash
 flutter test
 ```
-
-## Screenshots
-
-_Add screenshots here (light and dark theme, mobile and tablet layout)
-once you've run the app._
