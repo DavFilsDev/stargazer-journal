@@ -6,6 +6,9 @@ import '../models/star.dart';
 import '../services/observation_service.dart';
 import '../services/star_service.dart';
 import '../utils/constants.dart';
+import '../widgets/fade_slide_in.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
 
 /// Detail screen for a single [Star], resolved from the `:id` path
 /// parameter set up in the router (see `router.dart`).
@@ -23,7 +26,7 @@ class StarDetailScreen extends StatelessWidget {
 
     if (star == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Not found')),
+        appBar: const GlassAppBar(title: 'Not found'),
         body: const Center(
           child: Text('This celestial object could not be found.'),
         ),
@@ -34,15 +37,20 @@ class StarDetailScreen extends StatelessWidget {
         context.watch<ObservationService>().getForStar(star.id);
 
     return Scaffold(
-      appBar: AppBar(title: Text(star.name)),
+      appBar: GlassAppBar(title: star.name),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.medium),
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: _DetailHero(type: star.type),
+            child: Hero(
+              tag: 'star-thumb-${star.id}',
+              child: GlassContainer(
+                borderRadius: BorderRadius.circular(20),
+                blurSigma: 14,
+                opacity: 0.3,
+                child: _DetailHero(type: star.type),
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.medium),
@@ -53,20 +61,34 @@ class StarDetailScreen extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const SizedBox(height: AppSpacing.medium),
-          _InfoRow(label: 'Constellation', value: star.constellation),
-          _InfoRow(
-            label: 'Distance',
-            value: '${star.distanceLightYears} light-years',
+          GlassContainer(
+            borderRadius: BorderRadius.circular(16),
+            blurSigma: 12,
+            opacity: 0.3,
+            padding: const EdgeInsets.all(AppSpacing.medium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _InfoRow(label: 'Constellation', value: star.constellation),
+                _InfoRow(
+                  label: 'Distance',
+                  value: '${star.distanceLightYears} light-years',
+                ),
+                _InfoRow(
+                  label: 'Apparent magnitude',
+                  value: star.magnitude.toStringAsFixed(2),
+                ),
+                const SizedBox(height: AppSpacing.small),
+                Text(
+                  star.description,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
           ),
-          _InfoRow(
-            label: 'Apparent magnitude',
-            value: star.magnitude.toStringAsFixed(2),
-          ),
-          const SizedBox(height: AppSpacing.medium),
-          Text(star.description, style: Theme.of(context).textTheme.bodyLarge),
           const SizedBox(height: AppSpacing.large),
           Row(
             children: [
@@ -90,18 +112,27 @@ class StarDetailScreen extends StatelessWidget {
               child: Text('No observation logged yet for this object.'),
             )
           else
-            for (final observation in observations)
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.nights_stay_outlined),
-                  title: Text(observation.description),
-                  subtitle: Text(observation.formattedDateTime),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < observation.rating; i++)
-                        const Icon(Icons.star, size: 14, color: Colors.amber),
-                    ],
+            for (var i = 0; i < observations.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.small),
+                child: FadeSlideIn(
+                  index: i,
+                  child: GlassContainer(
+                    borderRadius: BorderRadius.circular(14),
+                    blurSigma: 10,
+                    opacity: 0.3,
+                    child: ListTile(
+                      leading: const Icon(Icons.nights_stay_outlined),
+                      title: Text(observations[i].description),
+                      subtitle: Text(observations[i].formattedDateTime),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (var s = 0; s < observations[i].rating; s++)
+                            const Icon(Icons.star, size: 14, color: Colors.amber),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -128,7 +159,7 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
             ),
           ),
@@ -154,11 +185,8 @@ class _DetailHero extends StatelessWidget {
     };
     final scheme = Theme.of(context).colorScheme;
 
-    return Container(
-      color: scheme.surfaceContainerHighest,
-      child: Center(
-        child: Icon(icon, size: 64, color: scheme.primary),
-      ),
+    return Center(
+      child: Icon(icon, size: 64, color: scheme.primary),
     );
   }
 }
