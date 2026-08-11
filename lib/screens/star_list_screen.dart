@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../models/star.dart';
 import '../services/star_service.dart';
 import '../utils/constants.dart';
+import '../widgets/fade_slide_in.dart';
+import '../widgets/glass_container.dart';
 import '../widgets/star_card.dart';
 import '../widgets/star_search_bar.dart';
 
 /// Home screen: search/filter field on top, list (mobile) or grid
-/// (tablet+) of [StarCard]s below.
+/// (tablet+) of [StarCard]s below, each animating in with [FadeSlideIn].
 ///
 /// All data comes from [StarService] — this screen holds only UI state
 /// (the current search text and type filter), never the catalog itself.
@@ -43,29 +45,35 @@ class _StarListScreenState extends State<StarListScreen> {
               AppSpacing.medium,
               AppSpacing.small,
             ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Stargazer Journal',
-                        style: Theme.of(context).textTheme.headlineSmall,
+            child: GlassContainer(
+              borderRadius: BorderRadius.circular(20),
+              blurSigma: 16,
+              opacity: 0.35,
+              padding: const EdgeInsets.all(AppSpacing.medium),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Stargazer Journal',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.small),
-                StarSearchBar(
-                  controller: _searchController,
-                  onChanged: (value) => setState(() => _query = value),
-                ),
-                const SizedBox(height: AppSpacing.small),
-                _TypeFilterRow(
-                  selected: _typeFilter,
-                  onSelected: (type) => setState(() => _typeFilter = type),
-                ),
-              ],
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  StarSearchBar(
+                    controller: _searchController,
+                    onChanged: (value) => setState(() => _query = value),
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  _TypeFilterRow(
+                    selected: _typeFilter,
+                    onSelected: (type) => setState(() => _typeFilter = type),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -110,7 +118,8 @@ class _TypeFilterRow extends StatelessWidget {
 }
 
 /// Switches between a single-column [ListView] on narrow screens and a
-/// multi-column [GridView] on wide screens.
+/// multi-column [GridView] on wide screens. Each item fades/slides in
+/// with a small stagger based on its index.
 class _AdaptiveResultsView extends StatelessWidget {
   final List<Star> stars;
 
@@ -133,7 +142,10 @@ class _AdaptiveResultsView extends StatelessWidget {
               childAspectRatio: 0.85,
             ),
             itemCount: stars.length,
-            itemBuilder: (context, index) => StarCard(star: stars[index]),
+            itemBuilder: (context, index) => FadeSlideIn(
+              index: index,
+              child: StarCard(star: stars[index]),
+            ),
           );
         }
 
@@ -142,7 +154,10 @@ class _AdaptiveResultsView extends StatelessWidget {
           itemCount: stars.length,
           separatorBuilder: (_, __) =>
               const SizedBox(height: AppSpacing.small),
-          itemBuilder: (context, index) => StarCard(star: stars[index]),
+          itemBuilder: (context, index) => FadeSlideIn(
+            index: index,
+            child: StarCard(star: stars[index]),
+          ),
         );
       },
     );
@@ -161,7 +176,7 @@ class _EmptyResults extends StatelessWidget {
           Icon(
             Icons.search_off,
             size: 48,
-            color: Theme.of(context).colorScheme.outline,
+            color: Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(height: AppSpacing.small),
           const Text('No celestial object matches your search.'),
