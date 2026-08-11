@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../utils/constants.dart';
+import '../widgets/glass_container.dart';
 import '../widgets/theme_toggle.dart';
 
-/// Settings screen: theme toggle plus a couple of secondary options.
+/// Settings screen: theme toggle plus a couple of secondary options,
+/// grouped inside a glass panel consistent with the rest of the app.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -12,29 +14,41 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.medium),
+        padding: const EdgeInsets.all(AppSpacing.medium),
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.medium),
-            child: Text(
-              'Settings',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+          Text(
+            'Settings',
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: AppSpacing.medium),
-          const ThemeToggle(),
-          const Divider(),
-          const ListTile(
-            leading: Icon(Icons.notifications_outlined),
-            title: Text('Observation reminders'),
-            subtitle: Text('Not implemented in this demo'),
-            trailing: Switch(value: false, onChanged: null),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('About Stargazer Journal'),
-            onTap: () => context.push(AppRoutes.about),
+          GlassContainer(
+            borderRadius: BorderRadius.circular(18),
+            blurSigma: 14,
+            opacity: 0.35,
+            child: Column(
+              children: [
+                const ThemeToggle(),
+                Divider(
+                  height: 1,
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                ),
+                const ListTile(
+                  leading: Icon(Icons.notifications_outlined),
+                  title: Text('Observation reminders'),
+                  subtitle: Text('Not implemented in this demo'),
+                  trailing: Switch(value: false, onChanged: null),
+                ),
+                Divider(
+                  height: 1,
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: const Text('About Stargazer Journal'),
+                  onTap: () => context.push(AppRoutes.about),
+                ),
+              ],
+            ),
           ),
         ],
       ),
